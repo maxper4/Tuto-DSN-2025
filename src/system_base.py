@@ -16,21 +16,28 @@ class SystemBase:
         self.components = components
         self.properties = self._merge_properties()
 
+    def refresh(self):
+        self.properties = self._merge_properties()
+
     def _merge_properties(self):
         all = list(set([a for _,c in self.components.items() for a in c.properties] + self.intrinsic_properties))
+        if "property 1" in all and "property 2" in all:
+            all.remove("property 1")
+            all.remove("property 2")
+            all.append("combination property 1 and 2")
+        if all == ["untrusted", "privacy-preserving" ] and self.__class__.__name__ == "FederatedLearning":
+            all.append("unscalable")
+        if "corrupted" in all and "privacy-preserving" in all:
+            all.remove("privacy-preserving")
+            all.remove("corrupted")
+            all.append("privacy-leaking")
         if "not cool" in all and "cool" in all:
             all.remove("not cool")
-        if "not trusted" in all and "trusted" in all:
+        if "untrusted" in all and "trusted" in all:
             all.remove("trusted")
         if "centralized" in all and "decentralized" in all:
             all.remove("decentralized")
         return all
-
-    def get_properties(self):
-        return {
-            "name": self.name,
-            "properties": self.properties
-        }
     
     def display(self):
         print(f"{self.name}\nProperties: {', '.join(self.properties)}")
@@ -58,6 +65,10 @@ class Component():
     def info(self):
         return f"{self.name} ({', '.join(self.properties)})"
 
+class ExampleSystem(SystemBase):
+    required_components_names = set(["Component 1", "Component 2"])
+    intrinsic_properties = ["intrinsic property"]
+
 class Blockchain(SystemBase):
     required_components_names = set(["Consensus", "Mempool"]) 
     intrinsic_properties = ["decentralized", "trusted"]
@@ -69,3 +80,12 @@ class FederatedLearning(SystemBase):
 class DistributedStorage(SystemBase):
     required_components_names = set(["Proofs"])
     intrinsic_properties = ["scalable", "not-available"]
+
+
+class CentralizedServer(Component):
+    def __init__(self):
+        super().__init__("Centralized Server", ["untrusted"])
+        
+    def corrupt(self):
+        self.properties.append("corrupted")
+        print("Centralized Server has been corrupted! It will now try to mislead the system.")
