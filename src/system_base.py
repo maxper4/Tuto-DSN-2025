@@ -25,7 +25,7 @@ class SystemBase:
             all.remove("property 1")
             all.remove("property 2")
             all.append("combination property 1 and 2")
-        if all == ["untrusted", "privacy-preserving" ] and self.__class__.__name__ == "FederatedLearning":
+        if "untrusted" in all and self.__class__.__name__ == "FederatedLearning":
             all.append("unscalable")
         if "corrupted" in all and "privacy-preserving" in all:
             all.remove("privacy-preserving")
@@ -37,6 +37,10 @@ class SystemBase:
             all.remove("trusted")
         if "centralized" in all and "decentralized" in all:
             all.remove("decentralized")
+        if "data-available" in all and "unavailable" in all:
+            all.remove("unavailable")
+            all.remove("data-available")
+            all.append("available")
         return all
     
     def display(self):
@@ -70,17 +74,16 @@ class ExampleSystem(SystemBase):
     intrinsic_properties = ["intrinsic property"]
 
 class Blockchain(SystemBase):
-    required_components_names = set(["Consensus", "Mempool"]) 
-    intrinsic_properties = ["decentralized", "trusted"]
+    required_components_names = set(["Consensus", "Transactions"]) 
+    intrinsic_properties = ["trusted"]
 
 class FederatedLearning(SystemBase):
     required_components_names = set(["Aggregation", "Models Storage"])
     intrinsic_properties = ["privacy-preserving"]
 
-class DistributedStorage(SystemBase):
-    required_components_names = set(["Proofs"])
-    intrinsic_properties = ["scalable", "not-available"]
-
+class DistributedStorage(Component):
+    def __init__(self):
+        super().__init__("Distributed Storage", ["scalable", "unavailable"])
 
 class CentralizedServer(Component):
     def __init__(self):
