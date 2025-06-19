@@ -97,3 +97,11 @@ class CentralizedServer(Component):
         if "corrupted" not in self.properties:
             self.properties.append("corrupted")
         print("Centralized Server has been corrupted! It will now try to mislead the system.")
+
+class CommitteeConsensus(Component):
+    def __init__(self):
+        super().__init__("Committee Consensus", ["immediate-finality"])
+
+class NakamotoConsensus(Component):
+    def __init__(self):
+        super().__init__("Nakamoto Consensus", ["probabilistic-finality"])
