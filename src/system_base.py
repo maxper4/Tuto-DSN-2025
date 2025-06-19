@@ -90,5 +90,6 @@ class CentralizedServer(Component):
         super().__init__("Centralized Server", ["untrusted"])
         
     def corrupt(self):
-        self.properties.append("corrupted")
+        if "corrupted" not in self.properties:
+            self.properties.append("corrupted")
         print("Centralized Server has been corrupted! It will now try to mislead the system.")
