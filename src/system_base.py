@@ -30,7 +30,7 @@ class SystemBase():
         if "untrusted" in all and "Aggregation" in self.components and "trusted" in self.components["Aggregation"].properties:
             all.remove("untrusted")
         if "Models Storage" in self.components and "trusted" in self.components["Models Storage"].properties:
-            all.add("heavy-storage")
+            all.append("heavy-storage")
         if "corrupted" in all and "privacy-preserving" in all:
             all.remove("privacy-preserving")
             all.remove("corrupted")
