@@ -1,4 +1,4 @@
-class SystemBase:
+class SystemBase():
     required_components_names = set([])
     intrinsic_properties = []
 
@@ -10,7 +10,7 @@ class SystemBase:
             raise TypeError("Components should be a dictionary")
         if self.required_components_names != components.keys():
             raise ValueError(f"Components for {self.name} should be: {self.required_components_names}")
-        if not all(isinstance(c, Component) or isinstance(c, SystemBase) for c in components.values()):
+        if not all(isinstance(c, (Component,SystemBase)) for c in components.values()):
             raise TypeError("All components should be instances of Component")
         
         self.components = components
@@ -27,10 +27,14 @@ class SystemBase:
             all.append("combination property 1 and 2")
         if "untrusted" in all and self.__class__.__name__ == "FederatedLearning":
             all.append("unscalable")
+        if "untrusted" in all and self.components["Aggregation"] and "trusted" in self.components["Aggregation"].properties:
+            all.remove("untrusted")
+        if self.components["Models Storage"] and "trusted" in self.components["Models Storage"].properties:
+            all.add("heavy-storage")
         if "corrupted" in all and "privacy-preserving" in all:
             all.remove("privacy-preserving")
             all.remove("corrupted")
-            all.append("privacy-leaking")
+            all.append("tampered model")
         if "not cool" in all and "cool" in all:
             all.remove("not cool")
         if "untrusted" in all and "trusted" in all:
