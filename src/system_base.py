@@ -27,9 +27,9 @@ class SystemBase():
             all.append("combination property 1 and 2")
         if "untrusted" in all and self.__class__.__name__ == "FederatedLearning":
             all.append("unscalable")
-        if "untrusted" in all and self.components["Aggregation"] and "trusted" in self.components["Aggregation"].properties:
+        if "untrusted" in all and "Aggregation" in self.components and "trusted" in self.components["Aggregation"].properties:
             all.remove("untrusted")
-        if self.components["Models Storage"] and "trusted" in self.components["Models Storage"].properties:
+        if "Models Storage" in self.components and "trusted" in self.components["Models Storage"].properties:
             all.add("heavy-storage")
         if "corrupted" in all and "privacy-preserving" in all:
             all.remove("privacy-preserving")
